@@ -210,12 +210,19 @@ body{
 .empty-s{font-size:13px;color:var(--tx2);line-height:1.5;max-width:260px}
 
 /* ═══ HOME ═══ */
-.home-banner{width:100%;border-radius:var(--rm);overflow:hidden;margin-bottom:14px;aspect-ratio:16/7;position:relative}
-.home-banner svg{width:100%;height:100%}
-.home-banner-label{position:absolute;bottom:12px;left:14px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--cp-700);background:rgba(255,255,255,.75);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:4px 10px;border-radius:100px}
-[data-theme="dark"] .home-banner-label{background:rgba(36,24,48,.7);color:var(--cp-300)}
 .ag{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .ac{background:var(--surf);border:1px solid var(--brd);border-radius:var(--rm);box-shadow:var(--e1);padding:16px 14px;display:flex;flex-direction:column;gap:10px;cursor:pointer;transition:all .18s;position:relative;overflow:hidden}
+/* Mini calendar */
+.mcal-header{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;margin-bottom:4px}
+.mcal-dh{text-align:center;font-size:9px;font-weight:700;color:var(--tx3);text-transform:uppercase;padding:2px 0}
+.mcal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.mcal-cell{display:flex;flex-direction:column;align-items:center;gap:2px;padding:3px 1px;min-height:32px;border-radius:6px}
+.mcal-cell.empty{background:none}
+.mcal-cell.today .mcal-dn{background:var(--cp-500);color:#fff;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center}
+.mcal-dn{font-size:10px;color:var(--tx2);line-height:1;width:18px;height:18px;display:flex;align-items:center;justify-content:center}
+.mcal-dots{display:flex;gap:2px;flex-wrap:wrap;justify-content:center}
+.mcal-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.mcal-chip{font-size:8px;font-weight:700;color:#fff;padding:1px 4px;border-radius:3px;line-height:14px}
 .ac:hover{box-shadow:var(--e2);transform:translateY(-1px)}
 .ac.dis{opacity:.42;cursor:not-allowed;pointer-events:none}
 .ac-ico{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center}
@@ -297,14 +304,15 @@ body{
 .scan-idle-t{font-size:13px;font-weight:500;color:rgba(255,255,255,.5);position:relative;z-index:1;text-align:center;padding:0 20px}
 #scan-preview-img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000;display:none}
 
-/* CROP OVERLAY */
+/* CROP OVERLAY — SVG quad (Pilar 1: homografía) */
 #crop-overlay{position:absolute;inset:0;pointer-events:none;z-index:10;display:none}
 #crop-overlay.show{display:block}
-#crop-rect{position:absolute;border:2px solid rgba(167,139,202,.9);background:rgba(167,139,202,.05);box-shadow:0 0 0 9999px rgba(0,0,0,.45);pointer-events:none}
-.crop-handle{position:absolute;width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--cp-500),var(--ca-500));border:2.5px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.4);transform:translate(-50%,-50%);pointer-events:all;cursor:grab;touch-action:none;display:flex;align-items:center;justify-content:center}
-.crop-handle:active{cursor:grabbing;transform:translate(-50%,-50%) scale(1.15)}
-.crop-handle .material-icons-round{font-size:13px;color:#fff}
+#crop-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.crop-quad-handle{cursor:grab;touch-action:none;pointer-events:all;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
+.crop-quad-handle:active{cursor:grabbing}
 .crop-corner-hint{position:absolute;top:8px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.62);color:#fff;font-size:10px;padding:4px 12px;border-radius:100px;white-space:nowrap;pointer-events:none;font-family:var(--font)}
+.cnn-badge{display:inline-flex;align-items:center;gap:4px;background:var(--ok);color:#fff;font-size:11px;font-weight:600;padding:3px 10px;border-radius:100px}
+.cnn-badge.inactive{background:var(--tx2)}
 
 /* ═══ PROGRESS ═══ */
 .prog-w{padding:14px;display:none}
@@ -499,54 +507,25 @@ body{
 <!-- HOME -->
 <div id="view-home" class="view active">
   <div class="vp">
-    <!-- Banner -->
-    <div class="home-banner">
-      <svg viewBox="0 0 400 175" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-        <defs><linearGradient id="bgrad" x1="0" y1="0" x2="400" y2="175" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#F0EAFA"/><stop offset="100%" stop-color="#FCF0F4"/></linearGradient></defs>
-        <rect width="400" height="175" fill="url(#bgrad)"/>
-        <path d="M30 20 Q24 38 30 52 Q38 68 52 64" stroke="#CC7A93" stroke-width="3" stroke-linecap="round" fill="none"/>
-        <circle cx="52" cy="64" r="7" fill="#CC7A93" opacity=".85"/><circle cx="52" cy="64" r="3.5" fill="#EAADBD"/>
-        <circle cx="25" cy="17" r="4" fill="#CC7A93"/><circle cx="34" cy="15" r="4" fill="#CC7A93"/>
-        <rect x="85" y="55" width="22" height="30" rx="4" fill="#A78BCA" opacity=".7"/><rect x="78" y="62" width="36" height="16" rx="4" fill="#A78BCA" opacity=".7"/>
-        <rect x="148" y="18" width="7" height="26" rx="3" fill="#A78BCA" opacity=".7"/><rect x="150" y="44" width="3" height="9" rx="1.5" fill="#7B5AA8" opacity=".7"/>
-        <rect x="145" y="15" width="13" height="5" rx="2" fill="#CEBBEA"/><rect x="150" y="8" width="3" height="9" rx="1.5" fill="#CEBBEA"/>
-        <rect x="200" y="110" width="50" height="30" rx="6" fill="#EAADBD"/>
-        <circle cx="214" cy="122" r="6" fill="#CC7A93" opacity=".75"/><circle cx="228" cy="122" r="6" fill="#CC7A93" opacity=".75"/><circle cx="242" cy="122" r="6" fill="#CC7A93" opacity=".75"/>
-        <rect x="320" y="15" width="52" height="44" rx="6" fill="white" fill-opacity=".8" stroke="#CEBBEA" stroke-width="1.5"/>
-        <rect x="320" y="15" width="52" height="15" rx="6" fill="#A78BCA"/>
-        <rect x="328" y="36" width="7" height="7" rx="2" fill="#CC7A93"/><rect x="340" y="36" width="7" height="7" rx="2" fill="#A78BCA"/>
-        <rect x="328" y="47" width="7" height="7" rx="2" fill="#A78BCA"/><rect x="340" y="47" width="7" height="7" rx="2" fill="#CC7A93"/>
-        <circle cx="330" cy="17" r="4" fill="white"/><circle cx="368" cy="17" r="4" fill="white"/>
-        <rect x="300" y="90" width="28" height="40" rx="6" fill="#A78BCA" opacity=".85"/><rect x="304" y="85" width="20" height="8" rx="3" fill="#7B5AA8"/>
-        <rect x="188" y="30" width="36" height="16" rx="5" fill="#EAADBD"/>
-        <line x1="206" y1="35" x2="206" y2="42" stroke="#CC7A93" stroke-width="1.5" stroke-linecap="round"/>
-        <line x1="202" y1="38.5" x2="210" y2="38.5" stroke="#CC7A93" stroke-width="1.5" stroke-linecap="round"/>
-        <path d="M130 95 C130 93 131.5 91 133 93 C134.5 91 136 93 136 95 C136 97.5 133 100 133 100Z" fill="#CC7A93" opacity=".65"/>
-        <path d="M165 75 L166.5 70 L168 75 L173 76.5 L168 78 L166.5 83 L165 78 L160 76.5Z" fill="#CEBBEA" opacity=".8"/>
-      </svg>
-      <div class="home-banner-label">🏥 Mis turnos</div>
-    </div>
-
     <div id="home-auth-alert" style="display:none"></div>
 
-    <!-- Monthly stats from Calendar -->
-    <div id="home-stats" style="display:none" class="card" style="margin-bottom:14px">
-      <div class="ch"><span class="material-icons-round">bar_chart</span><span class="ch-t">Este mes</span><div class="ch-r"><button class="btn btn-g btn-sm" onclick="syncFromCalendar()"><span class="material-icons-round">cloud_download</span>Sincronizar</button></div></div>
-      <div class="stats-strip" id="home-stats-strip" style="border-radius:0;border:none;border-top:1px solid var(--brd);margin-bottom:0"></div>
-    </div>
-
-    <!-- Active planilla -->
-    <div id="home-plan-card" style="display:none" class="card">
-      <div class="ch"><span class="material-icons-round">calendar_month</span><span class="ch-t">Planilla activa</span><div class="ch-r" id="home-plan-badge"></div></div>
-      <div class="cb" style="padding:12px 14px">
-        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-          <div><div id="home-plan-title" style="font-size:15px;font-weight:700;color:var(--tx)"></div><div id="home-plan-sub" style="font-size:11px;color:var(--tx2);margin-top:2px"></div></div>
-          <button class="btn btn-p btn-sm" style="margin-left:auto" onclick="nav('review')"><span class="material-icons-round">checklist</span>Revisar</button>
+    <!-- Planilla activa (compact) -->
+    <div id="home-plan-card" style="display:none" class="card" style="margin-bottom:12px">
+      <div class="ch">
+        <span class="material-icons-round">table_chart</span>
+        <span class="ch-t">Planilla activa</span>
+        <div class="ch-r" id="home-plan-badge"></div>
+      </div>
+      <div class="cb" style="padding:10px 14px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="flex:1"><div id="home-plan-title" style="font-size:14px;font-weight:700;color:var(--tx)"></div><div id="home-plan-sub" style="font-size:11px;color:var(--tx2);margin-top:2px"></div></div>
+          <button class="btn btn-p btn-sm" onclick="nav('review')"><span class="material-icons-round">checklist</span>Revisar</button>
         </div>
       </div>
     </div>
 
-    <div class="sec">Acciones</div>
+    <!-- Action grid -->
+    <div class="sec" style="margin-top:4px">Acciones</div>
     <div class="ag">
       <div class="ac" onclick="openCamera()">
         <div class="ac-ico" style="background:rgba(167,139,202,.14)"><span class="material-icons-round" style="color:var(--cp-500)">camera_alt</span></div>
@@ -558,13 +537,24 @@ body{
       </div>
       <div class="ac dis" id="ac-review" onclick="nav('review')">
         <div class="ac-ico" style="background:rgba(224,168,74,.12)"><span class="material-icons-round" style="color:var(--warn)">checklist</span></div>
-        <div><div class="ac-t">Revisar</div><div class="ac-s">Edita y exporta</div><div id="ac-rb" style="display:none"></div></div>
+        <div><div class="ac-t">Revisar OCR</div><div class="ac-s">Edita y guarda</div><div id="ac-rb" style="display:none"></div></div>
       </div>
-      <div class="ac" onclick="syncFromCalendar()">
-        <div class="ac-ico" style="background:rgba(107,191,160,.12)"><span class="material-icons-round" style="color:var(--ok)">cloud_download</span></div>
-        <div><div class="ac-t">Recuperar</div><div class="ac-s">Desde Calendar</div></div>
+      <div class="ac" onclick="nav('calendar')">
+        <div class="ac-ico" style="background:rgba(107,191,160,.12)"><span class="material-icons-round" style="color:var(--ok)">calendar_month</span></div>
+        <div><div class="ac-t">Calendario</div><div class="ac-s">Ver mis turnos</div></div>
       </div>
     </div>
+
+    <!-- Mini calendar -->
+    <div class="sec" style="margin-top:16px">
+      <span>Este mes</span>
+      <span id="mini-cal-title" style="font-size:11px;color:var(--tx2);margin-left:auto;font-weight:400"></span>
+    </div>
+    <div class="card" onclick="nav('calendar')" style="cursor:pointer;padding:14px">
+      <div id="mini-cal-grid"></div>
+      <div style="text-align:center;font-size:11px;color:var(--tx3);margin-top:10px">Toca para abrir el calendario completo →</div>
+    </div>
+
   </div>
 </div>
 
@@ -589,12 +579,36 @@ body{
       </div>
       <img id="scan-preview-img" alt="Preview">
       <div id="crop-overlay">
-        <div id="crop-rect"></div>
-        <div class="crop-corner-hint">Arrastra las esquinas — excluye Mes, Saldo y fila de días</div>
-        <div class="crop-handle" id="ch-tl" data-corner="tl"><span class="material-icons-round">open_with</span></div>
-        <div class="crop-handle" id="ch-tr" data-corner="tr"><span class="material-icons-round">open_with</span></div>
-        <div class="crop-handle" id="ch-bl" data-corner="bl"><span class="material-icons-round">open_with</span></div>
-        <div class="crop-handle" id="ch-br" data-corner="br"><span class="material-icons-round">open_with</span></div>
+        <!-- SVG quad overlay — 4 free corners for perspective correction -->
+        <svg id="crop-svg" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="hgrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#A78BCA"/>
+              <stop offset="100%" style="stop-color:#CC7A93"/>
+            </linearGradient>
+            <mask id="quad-mask">
+              <rect width="100%" height="100%" fill="white"/>
+              <polygon id="crop-poly-inner" fill="black"/>
+            </mask>
+          </defs>
+          <!-- Dark vignette outside the quad -->
+          <rect id="crop-vignette" width="100%" height="100%" fill="rgba(0,0,0,0.52)" mask="url(#quad-mask)"/>
+          <!-- Quad border + fill -->
+          <polygon id="crop-poly" fill="rgba(167,139,202,0.10)" stroke="rgba(167,139,202,0.95)" stroke-width="2.5" stroke-linejoin="round"/>
+          <!-- Grid lines inside the quad (visual guides) -->
+          <g id="crop-grid" stroke="rgba(167,139,202,0.3)" stroke-width="0.8" fill="none"></g>
+          <!-- Corner handles TL TR BR BL -->
+          <circle class="crop-quad-handle" id="cph-0" r="15" fill="url(#hgrad)" stroke="white" stroke-width="2.5"/>
+          <circle class="crop-quad-handle" id="cph-1" r="15" fill="url(#hgrad)" stroke="white" stroke-width="2.5"/>
+          <circle class="crop-quad-handle" id="cph-2" r="15" fill="url(#hgrad)" stroke="white" stroke-width="2.5"/>
+          <circle class="crop-quad-handle" id="cph-3" r="15" fill="url(#hgrad)" stroke="white" stroke-width="2.5"/>
+          <!-- Corner labels -->
+          <text class="crop-quad-lbl" id="cphl-0" text-anchor="middle" dy="4" font-size="11" fill="white" font-weight="700" pointer-events="none">↖</text>
+          <text class="crop-quad-lbl" id="cphl-1" text-anchor="middle" dy="4" font-size="11" fill="white" font-weight="700" pointer-events="none">↗</text>
+          <text class="crop-quad-lbl" id="cphl-2" text-anchor="middle" dy="4" font-size="11" fill="white" font-weight="700" pointer-events="none">↘</text>
+          <text class="crop-quad-lbl" id="cphl-3" text-anchor="middle" dy="4" font-size="11" fill="white" font-weight="700" pointer-events="none">↙</text>
+        </svg>
+        <div class="crop-corner-hint">Arrastra las 4 esquinas exactamente a los vértices de la tabla</div>
       </div>
     </div>
 
@@ -612,8 +626,8 @@ body{
       <div class="ch"><span class="material-icons-round">grid_on</span><span class="ch-t">Cuadrícula</span></div>
       <div class="cb">
         <div class="field">
-          <label>Filas: <span id="rv-rows" style="color:var(--cp-500);font-weight:700">24</span></label>
-          <div class="range-w"><input type="range" id="rng-rows" min="1" max="30" value="24" oninput="updateGridCfg()"><span class="range-v" id="rv-rows2">24</span></div>
+          <label>Filas: <span id="rv-rows" style="color:var(--cp-500);font-weight:700">12</span></label>
+          <div class="range-w"><input type="range" id="rng-rows" min="1" max="30" value="12" oninput="updateGridCfg()"><span class="range-v" id="rv-rows2">12</span></div>
         </div>
         <div class="field" style="margin-bottom:0">
           <label>Columnas (días): <span id="rv-cols" style="color:var(--cp-500);font-weight:700">31</span></label>
@@ -631,6 +645,7 @@ body{
       <button class="btn btn-p" id="btn-retry" onclick="resetScan()" style="display:none"><span class="material-icons-round">replay</span>Nueva captura</button>
       <button class="btn btn-p" id="btn-process" onclick="startOCR()" style="display:none"><span class="material-icons-round">auto_fix_high</span>Procesar OCR</button>
       <button class="btn btn-s" id="btn-go-review" onclick="nav('review')" style="display:none"><span class="material-icons-round">checklist</span>Ver resultados</button>
+      <button class="btn btn-s btn-sm" id="btn-export-cells" onclick="downloadTrainingCells()" style="display:none"><span class="material-icons-round">download</span>Exportar celdas (entrenar CNN)</button>
       <button class="btn btn-d btn-sm" id="btn-clear" onclick="clearPlanilla()" style="display:none"><span class="material-icons-round">delete_sweep</span>Limpiar todo</button>
     </div>
   </div>
@@ -653,7 +668,7 @@ body{
         <div id="rev-sub" style="font-size:11px;color:var(--tx2)"></div>
       </div>
       <select id="row-sel" onchange="renderRevTable()" style="padding:7px 10px;border:1.5px solid var(--brd);border-radius:8px;font-family:var(--font);font-size:12px;color:var(--tx);background:var(--surf);outline:none"></select>
-      <button class="btn btn-p btn-sm" id="btn-export" onclick="startExport()"><span class="material-icons-round">cloud_sync</span>Exportar</button>
+      <button class="btn btn-p btn-sm" id="btn-export" onclick="saveToLocalCalendar()"><span class="material-icons-round">save</span>Guardar en calendario</button>
     </div>
     <div class="stats-r">
       <div class="si"><div class="si-n" id="st-total">—</div><div class="si-l">Total</div></div>
@@ -679,24 +694,19 @@ body{
 <!-- CALENDARIO -->
 <div id="view-calendar" class="view">
   <div class="vp">
-    <div id="cal-auth-alert" class="alert a-warn" style="display:none">
-      <span class="material-icons-round">warning</span>
-      <div>Conecta Google Calendar para ver y recuperar tus turnos</div>
-    </div>
     <div class="cal-view-btns">
       <button class="cal-vb active" id="cvb-month" onclick="setCalView('dayGridMonth')">Mes</button>
       <button class="cal-vb" id="cvb-week" onclick="setCalView('timeGridWeek')">Semana</button>
       <button class="cal-vb" id="cvb-list" onclick="setCalView('listMonth')">Lista</button>
     </div>
-    <!-- Stats by shift type -->
     <div class="cal-stats" id="cal-stats-wrap" style="display:none">
       <div id="cal-stats-inner" style="display:flex;gap:12px;flex-wrap:wrap;flex:1"></div>
       <div style="font-size:11px;color:var(--tx2)"><span class="cal-stat-n" id="cal-hours-total">—</span> h/mes</div>
     </div>
     <div id="cal-wrap"></div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
-      <button class="btn btn-s btn-sm" onclick="loadCalendarEvents()"><span class="material-icons-round">refresh</span>Actualizar</button>
-      <button class="btn btn-g btn-sm" onclick="syncFromCalendar()"><span class="material-icons-round">cloud_download</span>Recuperar planilla</button>
+      <button class="btn btn-s btn-sm" onclick="loadLocalCalendar()"><span class="material-icons-round">refresh</span>Actualizar</button>
+      <button class="btn btn-g btn-sm" id="btn-sync-google" onclick="syncLocalToGoogle()"><span class="material-icons-round">cloud_upload</span>Sincronizar con Google</button>
     </div>
   </div>
 </div>
@@ -721,73 +731,112 @@ body{
 <!-- AJUSTES -->
 <div id="view-settings" class="view">
   <div class="vp">
+
     <div class="sec">Apariencia</div>
     <div class="card" style="margin-bottom:16px">
-      <div class="cb"><div class="field" style="margin-bottom:0"><label>Tema</label><select id="cfg-theme-sel" onchange="setThemeFromSelect(this.value)"><option value="light">☀️ Claro</option><option value="dark">🌙 Oscuro</option><option value="auto">🌗 Automático</option></select></div></div>
+      <div class="cb"><div class="field" style="margin-bottom:0"><label>Tema</label>
+        <select id="cfg-theme-sel" onchange="setThemeFromSelect(this.value)">
+          <option value="light">☀️ Claro</option><option value="dark">🌙 Oscuro</option><option value="auto">🌗 Automático</option>
+        </select>
+      </div></div>
     </div>
 
-    <div class="sec">Tipo de planilla</div>
-    <div class="card" style="margin-bottom:16px">
-      <div class="cb">
-        <div class="field"><label>Tipo</label>
-          <select id="cfg-ptype" onchange="saveCfgField('planillaType',this.value);renderPtypeHint()">
-            <option value="monthly">Mensual multi-persona (filas × 31 días)</option>
-            <option value="annual">Anual individual (12 meses × 31 días)</option>
-          </select>
-          <div class="fhint" id="ptype-hint"></div>
-        </div>
-        <div id="cfg-row-field" class="field" style="margin-bottom:0"><label>Mi fila en la planilla</label><input type="number" id="cfg-row" min="1" max="30" onchange="saveCfgField('targetRow',+this.value-1)"><div class="fhint">Qué fila corresponde a tus turnos (1 = primera)</div></div>
-      </div>
-    </div>
-
-    <div class="sec">Planilla</div>
+    <div class="sec">Mi planilla</div>
     <div class="card" style="margin-bottom:16px">
       <div class="cb">
         <div class="fr c2">
           <div class="field"><label>Año</label><select id="cfg-year" onchange="saveCfgField('year',+this.value)"></select></div>
-          <div class="field" id="cfg-month-wrap"><label>Mes</label><select id="cfg-month" onchange="saveCfgField('month',+this.value)"></select></div>
+          <div class="field"><label>Zona horaria</label><select id="cfg-tz" onchange="saveCfgField('timezone',this.value)"></select></div>
         </div>
-        <div class="field" style="margin-bottom:0"><label>Zona horaria</label><select id="cfg-tz" onchange="saveCfgField('timezone',this.value)"></select></div>
+        <div class="field" style="margin-bottom:0">
+          <label>Mi fila en la planilla (planillas multi-persona)</label>
+          <input type="number" id="cfg-row" min="1" max="50" onchange="saveCfgField('targetRow',+this.value-1)">
+          <div class="fhint">Solo necesario si la planilla tiene varias personas. Cuenta desde la fila 1.</div>
+        </div>
       </div>
-    </div>
-
-    <div class="sec">Cuadrícula por defecto</div>
-    <div class="card" style="margin-bottom:16px">
-      <div class="cb"><div class="fr c2">
-        <div class="field"><label>Filas</label><input type="number" id="cfg-grid-rows" min="1" max="50" onchange="saveGridCfg()"></div>
-        <div class="field" style="margin-bottom:0"><label>Columnas</label><input type="number" id="cfg-grid-cols" min="28" max="31" onchange="saveGridCfg()"></div>
-      </div></div>
     </div>
 
     <div class="sec">Tipos de turno</div>
     <div class="card" style="margin-bottom:16px">
       <div class="cb" style="padding:10px">
-        <div style="overflow-x:auto"><table class="stbl"><thead><tr><th>Cód.</th><th>Etiqueta</th><th>Inicio</th><th>Fin</th><th>Horas</th><th>Color</th><th></th></tr></thead><tbody id="shifts-tbody"></tbody></table></div>
+        <div class="alert a-info" style="margin-bottom:10px"><span class="material-icons-round">info</span><div style="font-size:12px">El OCR buscará exactamente <strong>D</strong> y <strong>N1</strong>. Aquí puedes configurar sus horarios y el color en el calendario.</div></div>
+        <div style="overflow-x:auto"><table class="stbl">
+          <thead><tr><th>Cód.</th><th>Etiqueta</th><th>Inicio</th><th>Fin</th><th>Horas</th><th>Color</th><th></th></tr></thead>
+          <tbody id="shifts-tbody"></tbody>
+        </table></div>
         <button class="btn btn-s btn-sm" style="margin-top:10px" onclick="openAddShift()"><span class="material-icons-round">add</span>Añadir turno</button>
       </div>
     </div>
 
-    <div class="sec">Duplicados en Calendar</div>
+    <div class="sec">Modelo CNN (Teachable Machine)</div>
     <div class="card" style="margin-bottom:16px">
-      <div class="cb"><div class="field" style="margin-bottom:0"><label>Política por defecto</label>
-        <select id="cfg-dup" onchange="saveCfgField('duplicatePolicy',this.value)">
-          <option value="ask">Preguntar siempre</option><option value="replace">Sustituir</option><option value="skip">Omitir</option><option value="duplicate">Duplicar</option>
-        </select>
-      </div></div>
+      <div class="cb">
+        <div id="cnn-status-bar" style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+          <span class="cnn-badge inactive" id="cnn-badge"><span class="material-icons-round" style="font-size:14px">memory</span><span id="cnn-badge-txt">Sin modelo</span></span>
+          <span style="font-size:11px;color:var(--tx2)">El modelo CNN es 50× más rápido y robusto que OCR</span>
+        </div>
+        <div class="alert a-info" style="margin-bottom:12px"><span class="material-icons-round">school</span>
+          <div style="font-size:12px;line-height:1.6">
+            <strong>Cómo entrenar tu modelo en 5 min:</strong><br>
+            1. Pulsa «Exportar celdas» → descarga ~370 imágenes de tus celdas<br>
+            2. Súbelas a <a href="https://teachablemachine.withgoogle.com/train/image" target="_blank" style="color:var(--info)">Teachable Machine</a> (clases: D, N1, empty)<br>
+            3. Entrena y exporta → TensorFlow.js → «Subir a la nube»<br>
+            4. Copia la URL del modelo aquí
+          </div>
+        </div>
+        <div class="field"><label>URL del modelo</label>
+          <input type="text" id="cfg-tm-url" placeholder="https://teachablemachine.withgoogle.com/models/XXXXX/" autocomplete="off"
+            style="font-family:var(--mono);font-size:12px">
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+          <button class="btn btn-p btn-sm" onclick="saveTMUrl()"><span class="material-icons-round">save</span>Guardar URL</button>
+          <button class="btn btn-s btn-sm" onclick="testLoadTMModel()"><span class="material-icons-round">cloud_download</span>Cargar modelo</button>
+          <button class="btn btn-g btn-sm" id="btn-export-cells" onclick="downloadTrainingCells()" style="display:none"><span class="material-icons-round">download</span>Exportar celdas</button>
+        </div>
+
+        <!-- ── Mapeador de clases CNN ── -->
+        <div id="cnn-map-section" style="display:none;margin-top:16px;border-top:1px solid var(--brd);padding-top:14px">
+          <div style="font-size:13px;font-weight:600;color:var(--tx);margin-bottom:4px">
+            <span class="material-icons-round" style="font-size:15px;vertical-align:-3px;color:var(--warn)">warning</span>
+            Mapear clases del modelo → turnos
+          </div>
+          <div style="font-size:11px;color:var(--tx2);margin-bottom:10px">
+            Teachable Machine usa nombres genéricos (CLASS 1, CLASS 2…). Asigna cada clase a su turno real.
+          </div>
+          <table style="width:100%;border-collapse:collapse;font-size:13px" id="cnn-map-table">
+            <thead><tr>
+              <th style="text-align:left;padding:4px 8px;color:var(--tx2);font-weight:600;font-size:11px">Clase del modelo</th>
+              <th style="text-align:left;padding:4px 8px;color:var(--tx2);font-weight:600;font-size:11px">→ Turno real</th>
+            </tr></thead>
+            <tbody id="cnn-map-body"></tbody>
+          </table>
+          <button class="btn btn-p btn-sm" style="margin-top:10px" onclick="saveCNNMap()">
+            <span class="material-icons-round">save</span>Guardar mapeo
+          </button>
+        </div>
+      </div>
     </div>
 
     <div class="sec">Google Calendar</div>
     <div class="card" style="margin-bottom:16px">
       <div class="cb">
-        <div class="alert a-info" style="margin-bottom:12px"><span class="material-icons-round">info</span><div style="font-size:12px;line-height:1.5">Necesitas un <strong>OAuth 2.0 Client ID</strong> de <a href="https://console.cloud.google.com/apis/credentials" target="_blank" style="color:var(--info)">Google Cloud Console</a>. Añade tu URL como origen autorizado.</div></div>
+        <div class="alert a-info" style="margin-bottom:12px"><span class="material-icons-round">info</span>
+          <div style="font-size:12px;line-height:1.5">Necesitas un <strong>OAuth 2.0 Client ID</strong> de <a href="https://console.cloud.google.com/apis/credentials" target="_blank" style="color:var(--info)">Google Cloud Console</a>. Añade tu dominio como origen autorizado.</div>
+        </div>
         <div class="field"><label>Client ID</label><input type="password" id="cfg-cid" placeholder="xxxxx.apps.googleusercontent.com" autocomplete="off"></div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <div class="field" style="margin-bottom:0"><label>Política de duplicados</label>
+          <select id="cfg-dup" onchange="saveCfgField('duplicatePolicy',this.value)">
+            <option value="ask">Preguntar siempre</option><option value="replace">Sustituir</option><option value="skip">Omitir</option>
+          </select>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
           <button class="btn btn-p btn-sm" onclick="saveClientId()"><span class="material-icons-round">save</span>Guardar</button>
           <button class="btn btn-g btn-sm" onclick="authClick()"><span class="material-icons-round">login</span>Iniciar sesión</button>
           <button class="btn btn-d btn-sm" id="btn-signout" style="display:none" onclick="signOut()"><span class="material-icons-round">logout</span>Cerrar sesión</button>
         </div>
       </div>
     </div>
+
   </div>
 </div>
 
@@ -873,20 +922,16 @@ const APP_V='V2';
 
 /* ══ CONFIG / STORAGE ══ */
 function defShifts(){return{
-  D:{label:'Día',    start:'07:00',end:'15:00',color:'#7A9BD0',hours:8},
-  N1:{label:'Noche', start:'22:00',end:'07:00',color:'#5060B0',hours:9},
-  T:{label:'Tarde',  start:'15:00',end:'22:00',color:'#E0A84A',hours:7},
-  L:{label:'Libre',  start:'',     end:'',     color:'#A898B8',hours:0},
-  F:{label:'Festivo',start:'',     end:'',     color:'#CC7A93',hours:0},
+  D: {label:'Día',   start:'08:00',end:'20:00',color:'#7A9BD0',hours:12},
+  N1:{label:'Noche', start:'20:00',end:'08:00',color:'#4A5FC0',hours:12},
 }}
 function defCfg(){
   const n=new Date();
   return{year:n.getFullYear(),month:n.getMonth()+1,
     timezone:Intl.DateTimeFormat().resolvedOptions().timeZone||'Europe/Madrid',
-    targetRow:0,gridRows:24,gridCols:31,duplicatePolicy:'ask',
+    targetRow:0,gridRows:12,gridCols:31,duplicatePolicy:'ask',
     planillaType:'annual',shifts:defShifts(),shiftsCustomized:false};
-}
-function loadCfg(){
+}function loadCfg(){
   try{const raw=localStorage.getItem('th_cfg');if(!raw)return defCfg();const s=JSON.parse(raw);const d=defCfg();const shifts=s.shiftsCustomized?{...s.shifts}:{...d.shifts,...(s.shifts||{})};return{...d,...s,shifts};}catch{return defCfg();}
 }
 function saveCfg(){localStorage.setItem('th_cfg',JSON.stringify(S.cfg));refreshTopbar();}
@@ -894,20 +939,175 @@ function saveCfgField(k,v){S.cfg[k]=v;saveCfg();refreshHome();}
 function saveGridCfg(){S.cfg.gridRows=+document.getElementById('cfg-grid-rows').value||24;S.cfg.gridCols=+document.getElementById('cfg-grid-cols').value||31;saveCfg();}
 function loadPlanilla(){try{return JSON.parse(localStorage.getItem('th_planilla')||'null');}catch{return null;}}
 function savePlanilla(){localStorage.setItem('th_planilla',S.planilla?JSON.stringify(S.planilla):'null');}
+
+/* ══ LOCAL EVENTS STORAGE ══ */
+function loadLocalEvents(){try{return JSON.parse(localStorage.getItem('th_events')||'[]');}catch{return[];}}
+function saveLocalEvents(){localStorage.setItem('th_events',JSON.stringify(S.localEvents||[]));}
+
+/**
+ * Convert planilla cells to calendar events and save locally.
+ * Annual planilla: row 0-1 → Jan, 2-3 → Feb, ..., 22-23 → Dec
+ * Each pair of rows = one month (some planillas have 1 row per month)
+ */
+function saveToLocalCalendar(){
+  if(!S.planilla){snack('Sin planilla activa','warn');return;}
+  const{cells,rows,cols,year}=S.planilla;
+  const yr=year||S.cfg.year;
+  const rowsPerMonth=Math.round(rows/12)||1;
+  const map=S.cfg.cnnClassMap||{};
+  const events=[];
+  let skippedUnmapped=0;
+
+  cells.forEach(cell=>{
+    if(!cell.code)return;
+    // Resolve code: apply cnnClassMap if the raw code isn't a known shift
+    let code=cell.code;
+    if(!S.cfg.shifts[code]){
+      code=map[code]||'';
+    }
+    if(!code){skippedUnmapped++;return;}
+    const sh=S.cfg.shifts[code];if(!sh)return;
+
+    const month=Math.floor(cell.row/rowsPerMonth)+1;
+    const day=cell.col+1;
+    const maxDay=new Date(yr,month,0).getDate();
+    if(day>maxDay||day<1)return;
+    const dateStr=`${yr}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+
+    let startISO,endISO;
+    if(sh.start&&sh.end){
+      startISO=`${dateStr}T${sh.start}:00`;
+      let endDate=dateStr;
+      if(sh.end<=sh.start&&sh.end!==''){
+        const d=new Date(dateStr);d.setDate(d.getDate()+1);
+        endDate=d.toISOString().slice(0,10);
+      }
+      endISO=`${endDate}T${sh.end}:00`;
+    }else{
+      startISO=dateStr;endISO=dateStr;
+    }
+    events.push({
+      id:`sh-${yr}-${month}-${day}-${code}`,
+      title:`${sh.label} (${code})`,
+      code,start:startISO,end:endISO,
+      color:sh.color||'var(--cp-500)',hours:sh.hours||0,
+      month,day,year:yr,
+    });
+  });
+
+  S.localEvents=events;
+  saveLocalEvents();
+  if(skippedUnmapped>0)
+    snack(`✓ ${events.length} guardados · ${skippedUnmapped} sin mapeo — ve a Ajustes → Modelo CNN`,'warn');
+  else
+    snack(`✓ ${events.length} turnos guardados en el calendario`,'ok');
+  refreshHome();
+  if(S.view==='calendar')loadLocalCalendar();
+}
+
+/* ══ MINI CALENDAR (home) ══ */
+function renderMiniCal(){
+  const el=document.getElementById('mini-cal-grid');
+  const titleEl=document.getElementById('mini-cal-title');
+  if(!el)return;
+  const now=new Date();
+  const year=now.getFullYear(),month=now.getMonth(); // 0-indexed
+  const MS2=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  if(titleEl)titleEl.textContent=`${MS2[month]} ${year}`;
+
+  const daysInMonth=new Date(year,month+1,0).getDate();
+  const firstDow=new Date(year,month,1).getDay(); // 0=Sun
+  const startPad=(firstDow+6)%7; // Mon-first
+  const today=now.getDate();
+
+  // Build event map for this month
+  const evMap={};
+  (S.localEvents||[]).forEach(ev=>{
+    if(!ev.start)return;
+    const d=new Date(ev.start);
+    if(d.getFullYear()===year&&d.getMonth()===month){
+      const dd=d.getDate();
+      if(!evMap[dd])evMap[dd]=[];
+      evMap[dd].push(ev);
+    }
+  });
+
+  const dhs=['L','M','X','J','V','S','D'];
+  let html=`<div class="mcal-header">${dhs.map(d=>`<div class="mcal-dh">${d}</div>`).join('')}</div><div class="mcal-grid">`;
+  for(let i=0;i<startPad;i++)html+=`<div class="mcal-cell empty"></div>`;
+  for(let d=1;d<=daysInMonth;d++){
+    const isToday=d===today;
+    const evs=evMap[d]||[];
+    html+=`<div class="mcal-cell${isToday?' today':''}">
+      <span class="mcal-dn">${d}</span>
+      <div class="mcal-dots">${evs.map(ev=>`<span class="mcal-dot" style="background:${ev.color||'var(--cp-500)'}"></span>`).join('')}</div>
+    </div>`;
+  }
+  html+='</div>';
+  el.innerHTML=html;
+}
+
+/* ══ LOCAL CALENDAR (FullCalendar) ══ */
+function loadLocalCalendar(){
+  if(!S.fcal)return;
+  S.fcal.removeAllEvents();
+  const evs=(S.localEvents||[]).map(ev=>({
+    id:ev.id,title:ev.title,start:ev.start,end:ev.end,
+    backgroundColor:ev.color,borderColor:ev.color,textColor:'#fff',
+    extendedProps:{code:ev.code,hours:ev.hours},
+  }));
+  S.fcal.addEventSource(evs);
+  updateCalStats();
+}
+
+/* ══ SYNC LOCAL → GOOGLE CALENDAR ══ */
+async function syncLocalToGoogle(){
+  if(!isAuthed()){snack('Conecta Google Calendar primero — ve a Ajustes','warn');return;}
+  const evs=S.localEvents||[];
+  if(!evs.length){snack('No hay turnos guardados localmente','warn');return;}
+
+  const calId=await ensureCalendar();
+  if(!calId){snack('No se pudo crear el calendario','err');return;}
+
+  let ok=0,fail=0;
+  snack(`Sincronizando ${evs.length} eventos…`,'info');
+  for(const ev of evs){
+    try{
+      const body={
+        summary:ev.title,
+        start:ev.start.includes('T')?{dateTime:ev.start,timeZone:S.cfg.timezone}:{date:ev.start},
+        end:ev.end.includes('T')?{dateTime:ev.end,timeZone:S.cfg.timezone}:{date:ev.end},
+        colorId:'9',
+        description:`SHIFTAPP:V2`,
+        extendedProperties:{private:{appTag:'SHIFTAPP:V2',shiftCode:ev.code,shiftColor:ev.color||'',shiftHours:String(ev.hours||0),year:String(ev.year||S.cfg.year)}},
+      };
+      await fetch(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calId)}/events`,{
+        method:'POST',headers:{Authorization:'Bearer '+S.auth.token,'Content-Type':'application/json'},
+        body:JSON.stringify(body),
+      });
+      ok++;
+    }catch{fail++;}
+  }
+  snack(`✓ ${ok} eventos en Google Calendar${fail?` · ${fail} errores`:''}`,fail?'warn':'ok');
+}
 function loadVacs(){try{return JSON.parse(localStorage.getItem('th_vacs')||'[]');}catch{return[];}}
 function saveVacs(){localStorage.setItem('th_vacs',JSON.stringify(S.vacs));}
 
 /* ══ STATE ══ */
 const S={
   view:'home',cfg:loadCfg(),planilla:loadPlanilla(),vacs:loadVacs(),
+  localEvents:loadLocalEvents(),
   auth:{token:null,expiresAt:0,email:''},
   scanMode:'camera',capturedUrl:null,
   ocrWorker:null,processing:false,
   filter:'all',editingIdx:null,
   exportPlan:null,dupRes:{},
   theme:localStorage.getItem('th_theme')||'auto',
-  cropRect:{x1:.14,y1:.18,x2:.98,y2:.94},
-  fc:null, // FullCalendar instance
+  // Pilar 1: 4-point free quad (TL, TR, BR, BL) in [0,1] relative to preview
+  cropPoly:[{x:.14,y:.18},{x:.98,y:.18},{x:.98,y:.94},{x:.14,y:.94}],
+  // Pilar 2: TensorFlow.js / Teachable Machine model
+  tmModel:null,
+  fcal:null,
   camFacing:'environment',flashOn:false,stream:null,
 };
 
@@ -915,15 +1115,7 @@ const S={
 function applyTheme(t){
   const dark=t==='dark'||(t==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);
   document.documentElement.setAttribute('data-theme',dark?'dark':'light');
-  const icons={light:'light_mode',dark:'dark_mode',auto:'brightness_auto'};
-  const ico=document.getElementById('theme-ico');
-  if(ico)ico.textContent=icons[t]||'brightness_auto';
-  // Update banner gradient
-  const stops=document.querySelectorAll('#bgrad stop');
-  if(dark){stops[0]?.setAttribute('stop-color','#2E2040');stops[1]?.setAttribute('stop-color','#3A2038');}
-  else{stops[0]?.setAttribute('stop-color','#F0EAFA');stops[1]?.setAttribute('stop-color','#FCF0F4');}
-  // Refresh FC if exists
-  if(S.fc)S.fc.render();
+  if(S.fcal)S.fcal.render();
 }
 function cycleTheme(){
   const order=['light','dark','auto'];S.theme=order[(order.indexOf(S.theme)+1)%3];
@@ -972,16 +1164,13 @@ function isAuthed(){return S.auth.token&&Date.now()<S.auth.expiresAt;}
 /* ══ HOME ══ */
 function refreshHome(){
   refreshTopbar();
-  // No inline alert — auth status is shown in the topbar chip
-  document.getElementById('home-auth-alert').innerHTML='';
   const pc=document.getElementById('home-plan-card');
   if(S.planilla){
     pc.style.display='';
-    const isA=S.planilla.planillaType==='annual';
-    document.getElementById('home-plan-title').textContent=isA?`Planilla ${S.planilla.year}`:`${MONTHS[S.planilla.month-1]} ${S.planilla.year}`;
     const recognized=S.planilla.cells.filter(c=>c.code).length;
     const low=S.planilla.cells.filter(c=>c.confidence<85&&c.code).length;
-    document.getElementById('home-plan-sub').textContent=`${recognized} celdas · ${S.planilla.rows}×${S.planilla.cols}`;
+    document.getElementById('home-plan-title').textContent=`Planilla ${S.planilla.year}`;
+    document.getElementById('home-plan-sub').textContent=`${recognized} turnos · ${S.planilla.rows}×${S.planilla.cols}`;
     document.getElementById('home-plan-badge').innerHTML=`<span class="chip ${low?'chip-warn':'chip-ok'}">${low?low+' dudosos':'✓ OK'}</span>`;
     document.getElementById('ac-review').classList.remove('dis');
     const rb=document.getElementById('ac-rb');
@@ -990,8 +1179,7 @@ function refreshHome(){
   }else{
     pc.style.display='none';document.getElementById('ac-review').classList.add('dis');document.getElementById('nb-badge-rev').textContent='';
   }
-  // Show stats strip if authed
-  document.getElementById('home-stats').style.display=isAuthed()?'':'none';
+  renderMiniCal();
 }
 
 /* ══ FULLSCREEN CAMERA ══ */
@@ -1111,6 +1299,7 @@ function showPreview(url){
   document.getElementById('crop-instr').style.display='flex';
   document.getElementById('btn-retry').style.display='';
   document.getElementById('btn-process').style.display='';
+  document.getElementById('btn-export-cells').style.display='';
   document.getElementById('btn-go-review').style.display='none';
   p.onload=()=>{initCropOverlay();p.onload=null;};
   if(p.complete&&p.naturalWidth)initCropOverlay();
@@ -1122,7 +1311,7 @@ function resetScan(){
   document.getElementById('crop-overlay').classList.remove('show');
   document.getElementById('prog-w').classList.remove('show');
   document.getElementById('crop-instr').style.display='none';
-  ['btn-retry','btn-process','btn-go-review'].forEach(id=>document.getElementById(id).style.display='none');
+  ['btn-retry','btn-process','btn-go-review','btn-export-cells'].forEach(id=>document.getElementById(id).style.display='none');
 }
 function updateGridCfg(){
   const r=document.getElementById('rng-rows').value,c=document.getElementById('rng-cols').value;
@@ -1138,40 +1327,451 @@ function updateGridCfgUI(){
 }
 
 /* ══ CROP OVERLAY ══ */
+/* ══════════════════════════════════════════════════════
+   PILAR 1 — CROP OVERLAY SVG QUAD + HOMOGRAFÍA
+   ══════════════════════════════════════════════════════ */
+
 function initCropOverlay(){
   document.getElementById('crop-overlay').classList.add('show');
-  renderCropRect();initCropHandles();
+  renderCropQuad();
+  initQuadHandles();
 }
-function renderCropRect(){
+
+/** Convert cropPoly [0..1] to pixel coords relative to scan-wrap */
+function polyToPixels(){
   const wrap=document.getElementById('scan-wrap');
   const W=wrap.clientWidth,H=wrap.clientHeight;
-  const{x1,y1,x2,y2}=S.cropRect;
-  const L=x1*W,T=y1*H,R=x2*W,B=y2*H;
-  const rect=document.getElementById('crop-rect');
-  rect.style.cssText=`left:${L}px;top:${T}px;width:${R-L}px;height:${B-T}px`;
-  posHandle('ch-tl',L,T);posHandle('ch-tr',R,T);posHandle('ch-bl',L,B);posHandle('ch-br',R,B);
+  return S.cropPoly.map(p=>({x:p.x*W,y:p.y*H}));
 }
-function posHandle(id,x,y){const h=document.getElementById(id);h.style.left=x+'px';h.style.top=y+'px';}
-function initCropHandles(){
-  document.querySelectorAll('.crop-handle').forEach(h=>{
-    h.onpointerdown=e=>{
-      e.preventDefault();h.setPointerCapture(e.pointerId);
-      const wrap=document.getElementById('scan-wrap');
-      const rect=wrap.getBoundingClientRect();const corner=h.dataset.corner;
-      h.onpointermove=ev=>{
-        const nx=Math.min(Math.max((ev.clientX-rect.left)/rect.width,0),1);
-        const ny=Math.min(Math.max((ev.clientY-rect.top)/rect.height,0),1);
-        const cr=S.cropRect;
-        if(corner==='tl'){cr.x1=Math.min(nx,cr.x2-.05);cr.y1=Math.min(ny,cr.y2-.05);}
-        if(corner==='tr'){cr.x2=Math.max(nx,cr.x1+.05);cr.y1=Math.min(ny,cr.y2-.05);}
-        if(corner==='bl'){cr.x1=Math.min(nx,cr.x2-.05);cr.y2=Math.max(ny,cr.y1+.05);}
-        if(corner==='br'){cr.x2=Math.max(nx,cr.x1+.05);cr.y2=Math.max(ny,cr.y1+.05);}
-        renderCropRect();
-      };
-      h.onpointerup=()=>{h.onpointermove=null;h.onpointerup=null;};
-    };
+
+function renderCropQuad(){
+  const pts=polyToPixels();
+  const wrap=document.getElementById('scan-wrap');
+  const W=wrap.clientWidth,H=wrap.clientHeight;
+  const pStr=pts.map(p=>`${p.x},${p.y}`).join(' ');
+
+  document.getElementById('crop-poly').setAttribute('points',pStr);
+  document.getElementById('crop-poly-inner').setAttribute('points',pStr);
+
+  // Position handles + labels
+  pts.forEach((p,i)=>{
+    const h=document.getElementById('cph-'+i);
+    const l=document.getElementById('cphl-'+i);
+    h.setAttribute('cx',p.x);h.setAttribute('cy',p.y);
+    l.setAttribute('x',p.x);l.setAttribute('y',p.y);
   });
-  window.addEventListener('resize',renderCropRect,{passive:true});
+
+  // Grid lines inside quad (rows and cols)
+  renderQuadGrid(pts);
+}
+
+function renderQuadGrid(pts){
+  const g=document.getElementById('crop-grid');
+  const rows=S.cfg.gridRows,cols=S.cfg.gridCols;
+  // pts: TL TR BR BL
+  const [TL,TR,BR,BL]=pts;
+  let lines='';
+  // Row lines
+  for(let r=0;r<=rows;r++){
+    const t=r/rows;
+    const lx=TL.x+(BL.x-TL.x)*t, ly=TL.y+(BL.y-TL.y)*t;
+    const rx=TR.x+(BR.x-TR.x)*t, ry=TR.y+(BR.y-TR.y)*t;
+    lines+=`<line x1="${lx}" y1="${ly}" x2="${rx}" y2="${ry}"/>`;
+  }
+  // Col lines
+  for(let c=0;c<=cols;c++){
+    const t=c/cols;
+    const tx=TL.x+(TR.x-TL.x)*t, ty=TL.y+(TR.y-TL.y)*t;
+    const bx=BL.x+(BR.x-BL.x)*t, by=BL.y+(BR.y-BL.y)*t;
+    lines+=`<line x1="${tx}" y1="${ty}" x2="${bx}" y2="${by}"/>`;
+  }
+  g.innerHTML=lines;
+}
+
+function initQuadHandles(){
+  for(let i=0;i<4;i++){
+    const h=document.getElementById('cph-'+i);
+    h.onpointerdown=e=>{
+      e.preventDefault();e.stopPropagation();
+      h.setPointerCapture(e.pointerId);
+      const wrap=document.getElementById('scan-wrap');
+      const rect=wrap.getBoundingClientRect();
+      h.onpointermove=ev=>{
+        const nx=Math.min(1,Math.max(0,(ev.clientX-rect.left)/rect.width));
+        const ny=Math.min(1,Math.max(0,(ev.clientY-rect.top)/rect.height));
+        S.cropPoly[i]={x:nx,y:ny};
+        renderCropQuad();
+      };
+      h.onpointerup=()=>{h.onpointermove=null;h.onpointerup=null;
+        // Save poly to localStorage
+        localStorage.setItem('th_cropPoly',JSON.stringify(S.cropPoly));
+      };
+    };
+  }
+  // Restore saved poly
+  try{const s=localStorage.getItem('th_cropPoly');if(s)S.cropPoly=JSON.parse(s);}catch{}
+  window.addEventListener('resize',renderCropQuad,{passive:true});
+}
+
+/* ══════════════════════════════════════════════════════
+   HOMOGRAFÍA — Direct Linear Transform
+   Transforma la foto perspectivada en imagen plana
+   ══════════════════════════════════════════════════════ */
+
+/** Gaussian elimination (in-place) for Ax=b */
+function gaussElim(A,b){
+  const n=b.length;
+  const M=A.map((r,i)=>[...r,b[i]]);
+  for(let col=0;col<n;col++){
+    let maxR=col;
+    for(let r=col+1;r<n;r++)if(Math.abs(M[r][col])>Math.abs(M[maxR][col]))maxR=r;
+    [M[col],M[maxR]]=[M[maxR],M[col]];
+    if(Math.abs(M[col][col])<1e-10)continue;
+    const piv=M[col][col];
+    for(let j=col;j<=n;j++)M[col][j]/=piv;
+    for(let r=0;r<n;r++){
+      if(r===col)continue;
+      const f=M[r][col];
+      for(let j=col;j<=n;j++)M[r][j]-=f*M[col][j];
+    }
+  }
+  return M.map(r=>r[n]);
+}
+
+/**
+ * Compute 3×3 homography H mapping srcPts → dstPts (4 point correspondences).
+ * Returns flat array [h00..h22].
+ */
+function computeHomography(srcPts,dstPts){
+  const A=[];
+  for(let i=0;i<4;i++){
+    const{x:xs,y:ys}=srcPts[i];
+    const{x:xd,y:yd}=dstPts[i];
+    A.push([-xs,-ys,-1,0,0,0,xd*xs,xd*ys,xd]);
+    A.push([0,0,0,-xs,-ys,-1,yd*xs,yd*ys,yd]);
+  }
+  const M8=A.map(r=>r.slice(0,8));
+  const b8=A.map(r=>-r[8]);
+  const h=gaussElim(M8,b8);
+  return[...h,1];
+}
+
+/**
+ * Warp srcCanvas using homography so the quad → rectangle.
+ * outW × outH is the output canvas size (= cols*cw × rows*ch).
+ * polyPx: [{x,y}] TL TR BR BL in source image pixel coords.
+ */
+function warpPerspective(srcCanvas,polyPx,outW,outH){
+  const dst=[{x:0,y:0},{x:outW,y:0},{x:outW,y:outH},{x:0,y:outH}];
+  // H maps OUTPUT coords → SOURCE coords (inverse warp = no holes)
+  const H=computeHomography(dst,polyPx);
+
+  const out=document.createElement('canvas');
+  out.width=outW;out.height=outH;
+  const octx=out.getContext('2d');
+  const sw=srcCanvas.width,sh=srcCanvas.height;
+  const srcId=srcCanvas.getContext('2d').getImageData(0,0,sw,sh);
+  const sd=srcId.data;
+  const outId=octx.createImageData(outW,outH);
+  const od=outId.data;
+
+  for(let y=0;y<outH;y++){
+    for(let x=0;x<outW;x++){
+      const denom=H[6]*x+H[7]*y+H[8];
+      const xs=(H[0]*x+H[1]*y+H[2])/denom;
+      const ys=(H[3]*x+H[4]*y+H[5])/denom;
+      // Bilinear sample
+      const x0=Math.floor(xs),y0=Math.floor(ys);
+      const fx=xs-x0,fy=ys-y0;
+      const oi=(y*outW+x)*4;
+      for(let c=0;c<4;c++){
+        const v00=smpC(sd,sw,sh,x0,y0,c);
+        const v10=smpC(sd,sw,sh,x0+1,y0,c);
+        const v01=smpC(sd,sw,sh,x0,y0+1,c);
+        const v11=smpC(sd,sw,sh,x0+1,y0+1,c);
+        od[oi+c]=Math.round(v00*(1-fx)*(1-fy)+v10*fx*(1-fy)+v01*(1-fx)*fy+v11*fx*fy);
+      }
+    }
+  }
+  octx.putImageData(outId,0,0);
+  return out;
+}
+
+function smpC(d,w,h,x,y,c){
+  const xc=Math.max(0,Math.min(w-1,x));
+  const yc=Math.max(0,Math.min(h-1,y));
+  return d[(yc*w+xc)*4+c];
+}
+
+/**
+ * Convert S.cropPoly (relative [0,1]) to pixel coords in the actual source image.
+ * The preview img may be letterboxed (object-fit:contain), so we need to map
+ * preview-relative coords back to image-native coords.
+ */
+function cropPolyToImagePixels(imgCanvas){
+  const img=document.getElementById('scan-preview-img');
+  const iw=imgCanvas.width,ih=imgCanvas.height;
+  const dw=img.clientWidth,dh=img.clientHeight;
+  const scale=Math.min(dw/iw,dh/ih);
+  const ox=(dw-iw*scale)/2,oy=(dh-ih*scale)/2;
+  return S.cropPoly.map(p=>{
+    const px=p.x*dw,py=p.y*dh;
+    return{x:(px-ox)/scale,y:(py-oy)/scale};
+  });
+}
+
+/* ══════════════════════════════════════════════════════
+   PILAR 2 — TENSORFLOW.JS / TEACHABLE MACHINE CNN
+   ══════════════════════════════════════════════════════ */
+
+function loadScript(url){
+  return new Promise((res,rej)=>{
+    if(document.querySelector(`script[src="${url}"]`)){res();return;}
+    const s=document.createElement('script');s.src=url;s.onload=res;s.onerror=rej;
+    document.head.appendChild(s);
+  });
+}
+
+async function loadTMLibs(){
+  setP(4,'Cargando TensorFlow.js…','');
+  await loadScript('https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js');
+  await loadScript('https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.5/dist/teachablemachine-image.min.js');
+}
+
+async function testLoadTMModel(){
+  const url=(document.getElementById('cfg-tm-url')||{}).value||S.cfg.tmModelUrl||'';
+  if(!url){snack('Introduce la URL del modelo primero','err');return;}
+  saveTMUrl();
+  snack('Cargando modelo CNN…','info');
+  try{
+    await loadTMLibs();
+    const modelUrl=url.endsWith('/')?url:url+'/';
+    S.tmModel=await window.tmImage.load(modelUrl+'model.json',modelUrl+'metadata.json');
+    updateCNNBadge(true);
+    renderCNNMap();
+    snack('✓ Modelo CNN cargado — asigna las clases abajo','ok');
+  }catch(e){
+    console.error('TM load error',e);
+    snack('Error cargando modelo: '+e.message,'err');
+  }
+}
+
+/** Render the class → shift mapping table */
+function renderCNNMap(){
+  if(!S.tmModel)return;
+  const section=document.getElementById('cnn-map-section');
+  if(section)section.style.display='';
+
+  const classes=S.tmModel.getClassLabels?S.tmModel.getClassLabels():
+    Array.from({length:S.tmModel.getTotalClasses()},(_,i)=>'Class '+(i+1));
+
+  const shiftKeys=Object.keys(S.cfg.shifts);
+  const saved=S.cfg.cnnClassMap||{};
+
+  const opts=[
+    '<option value="">— vacío / libre (no crea evento) —</option>',
+    ...shiftKeys.map(k=>`<option value="${k}">${k} — ${S.cfg.shifts[k].label}</option>`)
+  ].join('');
+
+  document.getElementById('cnn-map-body').innerHTML=classes.map((cls,i)=>{
+    // Determine best pre-selection:
+    // 1. Already saved
+    // 2. Class name directly matches a shift key
+    // 3. Class name looks like "empty"/"-" → vacío ('')
+    let autoVal=saved[cls]!==undefined?saved[cls]:'__NONE__';
+    if(autoVal==='__NONE__'){
+      const upper=cls.trim().toUpperCase();
+      if(shiftKeys.includes(upper))autoVal=upper;
+      else if(/^[-–—\s]*$|empty|libre|vac[íi]o/i.test(cls.trim()))autoVal='';
+      else autoVal='';
+    }
+    // Build options with correct selected
+    const builtOpts=opts.replace(
+      `value="${autoVal}"`,
+      `value="${autoVal}" selected`
+    );
+    const isEmptyClass=/^[-–—\s]*$|empty|libre/i.test(cls.trim());
+    return`<tr style="${isEmptyClass?'background:rgba(124,200,164,0.08)':''}">
+      <td style="padding:6px 8px;font-family:var(--mono);font-weight:700;color:${isEmptyClass?'var(--ok)':'var(--cp-700)'}">
+        ${cls}${isEmptyClass?' <span style="font-size:10px;font-weight:400;color:var(--ok)">(celda vacía)</span>':''}
+      </td>
+      <td style="padding:6px 8px">
+        <select id="cnn-map-${i}" style="padding:5px 8px;border:1.5px solid var(--brd);border-radius:8px;font-family:var(--font);font-size:13px;color:var(--tx);background:var(--surf);width:100%">
+          ${builtOpts}
+        </select>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function saveCNNMap(){
+  if(!S.tmModel)return;
+  const classes=S.tmModel.getClassLabels?S.tmModel.getClassLabels():
+    Array.from({length:S.tmModel.getTotalClasses()},(_,i)=>'Class '+(i+1));
+  const map={};
+  classes.forEach((cls,i)=>{
+    const sel=document.getElementById('cnn-map-'+i);
+    if(sel&&sel.value)map[cls]=sel.value;
+  });
+  S.cfg.cnnClassMap=map;saveCfg();
+  snack('✓ Mapeo guardado: '+JSON.stringify(map),'ok');
+}
+
+function saveTMUrl(){
+  const url=(document.getElementById('cfg-tm-url')||{}).value||'';
+  S.cfg.tmModelUrl=url;saveCfg();
+}
+
+function updateCNNBadge(loaded){
+  const badge=document.getElementById('cnn-badge');
+  const txt=document.getElementById('cnn-badge-txt');
+  if(!badge)return;
+  if(loaded){
+    badge.classList.remove('inactive');
+    const nc=S.tmModel?S.tmModel.getTotalClasses():0;
+    txt.textContent='Modelo CNN activo ('+nc+' clases)';
+  }else{
+    badge.classList.add('inactive');
+    txt.textContent='Sin modelo';
+  }
+}
+
+/** Classify a cell canvas using the loaded TM model + class map */
+async function classifyCell(cellCanvas){
+  if(!S.tmModel)return null;
+  const preds=await S.tmModel.predict(cellCanvas);
+  preds.sort((a,b)=>b.probability-a.probability);
+  const best=preds[0];
+  const map=S.cfg.cnnClassMap||{};
+
+  // Check ALL predictions, not just the best —
+  // find if any class maps to a real shift
+  // This way if best="–" (empty) we never accidentally assign a shift
+  let code='';
+  for(const pred of preds){
+    // Direct map lookup
+    let c=map[pred.className]||'';
+    // Fallback: class name IS a shift key
+    if(!c){
+      const upper=pred.className.trim().toUpperCase();
+      if(S.cfg.shifts[upper])c=upper;
+    }
+    // If this class maps to a real shift AND it's the most confident
+    if(c&&pred===best){code=c;break;}
+    if(c&&pred!==best)break; // best didn't map to a shift → empty
+  }
+
+  // Treat as empty if:
+  // 1. class name looks like "empty" / "-" / "libre" / "vacio"
+  // 2. no code found
+  // 3. best class is explicitly mapped to "" (vacío) in the map
+  const bestMapped=map[best.className]; // undefined=not in map, ''=explicitly vacío
+  const bestIsExplicitlyEmpty=bestMapped==='';
+  const bestNameIsEmpty=/^[-–—\s]*$|empty|libre|vac[íi]o/i.test(best.className.trim());
+
+  if(bestIsExplicitlyEmpty||bestNameIsEmpty)code='';
+
+  return{
+    code,
+    confidence:Math.round(best.probability*100),
+    rawClassName:best.className,
+  };
+}
+
+/** Export all cell images for Teachable Machine training.
+ *  Applies homography + grayscale + adaptive binarization so letters
+ *  are clearly visible (black on white) regardless of background color.
+ */
+async function downloadTrainingCells(){
+  if(!S.capturedUrl){snack('Necesitas una imagen capturada primero','err');return;}
+  snack('Procesando celdas…','info');
+
+  // Show progress in prog-w if visible
+  document.getElementById('prog-w').classList.add('show');
+
+  try{
+    const full=await loadImgCanvas(S.capturedUrl);
+    const polyPx=cropPolyToImagePixels(full);
+    const rows=S.cfg.gridRows,cols=S.cfg.gridCols;
+    const CELL_SZ=96; // bigger = better training images
+    const outW=cols*CELL_SZ,outH=rows*CELL_SZ;
+
+    setP(10,'Aplicando homografía…','');
+    const warped=warpPerspective(full,polyPx,outW,outH);
+
+    // Use known cells from planilla as labels if available
+    const labelMap={};
+    if(S.planilla&&S.planilla.cells)
+      S.planilla.cells.forEach(c=>{
+        // Resolve label through cnnClassMap if needed
+        let code=c.code||'';
+        const map=S.cfg.cnnClassMap||{};
+        if(code&&!S.cfg.shifts[code])code=map[code]||'';
+        labelMap[c.row+'-'+c.col]=code||'-';
+      });
+
+    const TRIM=Math.round(CELL_SZ*0.10); // 10% trim to remove grid lines
+    const innerSz=CELL_SZ-TRIM*2;
+
+    const cellCanvas=document.createElement('canvas');
+    cellCanvas.width=innerSz;cellCanvas.height=innerSz;
+    const cctx=cellCanvas.getContext('2d');
+
+    // Export canvas at 96px for download
+    const exportCanvas=document.createElement('canvas');
+    exportCanvas.width=96;exportCanvas.height=96;
+    const ectx=exportCanvas.getContext('2d');
+
+    let count=0;
+    const total=rows*cols;
+
+    for(let r=0;r<rows;r++){
+      for(let c=0;c<cols;c++){
+        // 1. Extract cell from warped image with trim
+        cctx.fillStyle='#fff';
+        cctx.fillRect(0,0,innerSz,innerSz);
+        cctx.drawImage(warped,
+          c*CELL_SZ+TRIM, r*CELL_SZ+TRIM, innerSz, innerSz,
+          0, 0, innerSz, innerSz);
+
+        // 2. Grayscale
+        toGray(cellCanvas);
+
+        // 3. Adaptive binarize → letter becomes black on white
+        adaptiveBinarizeRow(cellCanvas);
+
+        // 4. Draw onto 96×96 export canvas (centered with white bg)
+        ectx.fillStyle='#fff';
+        ectx.fillRect(0,0,96,96);
+        const offset=Math.round((96-innerSz)/2);
+        ectx.drawImage(cellCanvas,offset,offset);
+
+        // 5. Determine label
+        const label=labelMap[r+'-'+c]||'-';
+        // Only export if we have planilla data (labeled), or export all with label "unknown"
+        const fileName=`${label}_r${String(r).padStart(2,'0')}c${String(c).padStart(2,'0')}.png`;
+
+        // Trigger download
+        const url=exportCanvas.toDataURL('image/png');
+        const a=document.createElement('a');
+        a.href=url;a.download=fileName;
+        document.body.appendChild(a);a.click();document.body.removeChild(a);
+
+        count++;
+        if(count%10===0){
+          setP(10+Math.round((count/total)*85),'Exportando…',`${count}/${total} · última: ${fileName}`);
+          await new Promise(r=>setTimeout(r,15)); // breathe
+        }
+      }
+    }
+
+    setP(100,'¡Exportación completa!',`${count} imágenes descargadas`);
+    snack(`✓ ${count} celdas exportadas — ahora verás letras claras en blanco y negro`,'ok');
+  }catch(e){
+    console.error('Export cells error',e);
+    setP(0,'Error',e.message);
+    snack('Error exportando: '+e.message,'err');
+  }
 }
 
 /* ══ IMAGE PROCESSING ══ */
@@ -1183,29 +1783,6 @@ function loadImgCanvas(url){
   });
 }
 
-/** Preprocess for OCR: grayscale → sharpen → high contrast binarize */
-function preprocess(canvas){
-  const ctx=canvas.getContext('2d');
-  const id=ctx.getImageData(0,0,canvas.width,canvas.height);const d=id.data;
-  // Step 1: grayscale
-  for(let i=0;i<d.length;i+=4){
-    const g=0.299*d[i]+0.587*d[i+1]+0.114*d[i+2];
-    d[i]=d[i+1]=d[i+2]=g;
-  }
-  // Step 2: high contrast stretch (dark cells on white background → maximize contrast)
-  let mn=255,mx=0;
-  for(let i=0;i<d.length;i+=4){mn=Math.min(mn,d[i]);mx=Math.max(mx,d[i]);}
-  const range=mx-mn||1;
-  for(let i=0;i<d.length;i+=4){
-    const v=Math.round((d[i]-mn)/range*255);
-    // Hard threshold: below midpoint → black, above → white (binarize)
-    const bw=v<140?0:255;
-    d[i]=d[i+1]=d[i+2]=bw;
-  }
-  ctx.putImageData(id,0,0);return canvas;
-}
-
-/* ══ OCR ══ */
 function setP(pct,txt,sub){
   document.getElementById('prog-fill').style.width=pct+'%';
   document.getElementById('prog-pct').textContent=Math.round(pct)+'%';
@@ -1222,23 +1799,111 @@ function loadTesseract(){
     document.head.appendChild(s);
   });
 }
+/** Build Tesseract whitelist from configured shift keys.
+ * E.g. shifts {D, N1, T} → unique chars → "DN1T"
+ */
+function buildWhitelist(){
+  const keys=Object.keys(S.cfg.shifts);
+  const chars=new Set();
+  keys.forEach(k=>k.split('').forEach(c=>chars.add(c)));
+  return [...chars].sort().join('');
+}
+
+/** Normalize OCR output to a known shift code.
+ * Uses configured shifts as source of truth.
+ */
 function normCode(raw){
   if(!raw)return'';
-  let t=raw.trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
-  if(!t||t.length>3)return'';
-  if(/^\d+$/.test(t))return''; // reject pure numbers (day headers)
-  // Known misreads
-  if(t==='NI'||t==='NL')t='N1';
-  if(t==='N2'||t==='NZ')t='N2';
-  if(t==='O'||t==='0'||t==='Q')t='D';
   const known=Object.keys(S.cfg.shifts);
+  // Clean: only keep chars that appear in any shift key
+  const validChars=new Set(known.join('').split(''));
+  let t=raw.trim().toUpperCase().split('').filter(c=>validChars.has(c)).join('');
+  if(!t||t.length>4)return'';
+  if(/^\d+$/.test(t))return''; // pure numbers → noise
+
+  // Exact match first
   if(known.includes(t))return t;
+
+  // Common misreads
+  const fixes={'NI':'N1','NL':'N1','1N':'N1','N':'N1','DI':'D','0':'D','O':'D'};
+  if(fixes[t]&&known.includes(fixes[t]))return fixes[t];
+
+  // Fuzzy: first char match + similar length
   const fuzz=known.find(k=>k[0]===t[0]&&Math.abs(k.length-t.length)<=1);
   if(fuzz)return fuzz;
-  if(/^[A-Z]\d?$/.test(t))return t;
+
   return'';
 }
 
+/** Grayscale only */
+function toGray(canvas){
+  const ctx=canvas.getContext('2d');
+  const id=ctx.getImageData(0,0,canvas.width,canvas.height);const d=id.data;
+  for(let i=0;i<d.length;i+=4){const g=0.299*d[i]+0.587*d[i+1]+0.114*d[i+2];d[i]=d[i+1]=d[i+2]=g;}
+  ctx.putImageData(id,0,0);return canvas;
+}
+
+/**
+ * Adaptive binarize. Handles three cases:
+ * - White/light cells: normal Bradley-Roth
+ * - Light-grey cells (festivos): slightly more aggressive threshold
+ * - Dark cells (fines de semana): invert first, then binarize, then re-invert
+ *   so dark-on-dark letters become readable black-on-white
+ */
+function adaptiveBinarizeRow(canvas){
+  const ctx=canvas.getContext('2d');
+  const{width:w,height:h}=canvas;
+  const id=ctx.getImageData(0,0,w,h);
+  const d=id.data;
+
+  // Compute mean brightness of the whole cell
+  let sum=0;
+  const n=w*h;
+  for(let i=0;i<n;i++)sum+=d[i*4]; // already grayscale so R=G=B
+  const meanBright=sum/n;
+
+  const gray=new Uint8Array(n);
+  for(let i=0;i<n;i++)gray[i]=d[i*4];
+
+  // For very dark cells (weekend): invert so letter becomes white-on-dark,
+  // then binarize, then the result is black letter on white — same as light cells
+  const isDark=meanBright<100; // threshold: cells darker than ~40% brightness
+  if(isDark){
+    for(let i=0;i<n;i++)gray[i]=255-gray[i];
+  }
+
+  // Bradley-Roth local threshold
+  const half=Math.max(8,Math.round(Math.min(w,h)*0.55));
+  const ii=new Float64Array((w+1)*(h+1));
+  for(let y=0;y<h;y++)
+    for(let x=0;x<w;x++)
+      ii[(y+1)*(w+1)+(x+1)]=gray[y*w+x]+ii[y*(w+1)+(x+1)]+ii[(y+1)*(w+1)+x]-ii[y*(w+1)+x];
+
+  // Threshold bias: darker cells need a tighter threshold to reveal letters
+  const bias=isDark?4:8;
+
+  for(let y=0;y<h;y++){
+    for(let x=0;x<w;x++){
+      const x0=Math.max(0,x-half),y0=Math.max(0,y-half);
+      const x1=Math.min(w,x+half+1),y1=Math.min(h,y+half+1);
+      const area=(x1-x0)*(y1-y0);
+      const s=ii[y1*(w+1)+x1]-ii[y0*(w+1)+x1]-ii[y1*(w+1)+x0]+ii[y0*(w+1)+x0];
+      const bw=gray[y*w+x]<(s/area)-bias?0:255;
+      const i4=(y*w+x)*4;
+      d[i4]=d[i4+1]=d[i4+2]=bw;
+    }
+  }
+  ctx.putImageData(id,0,0);
+  return canvas;
+}
+
+/**
+ * PIPELINE PRINCIPAL:
+ * 1. Warp perspectiva (homografía) → imagen plana 100% alineada
+ * 2. Extraer celda individual (trim 15% bordes)
+ * 3a. Si hay modelo CNN → classifyCell() (~1 s total)
+ * 3b. Si no → Tesseract PSM 8 por celda (fallback)
+ */
 async function startOCR(){
   if(!S.capturedUrl||S.processing)return;
   S.processing=true;
@@ -1247,116 +1912,156 @@ async function startOCR(){
   document.getElementById('btn-process').style.display='none';
   document.getElementById('btn-retry').style.display='none';
   document.getElementById('crop-instr').style.display='none';
-  setP(0,'Cargando Tesseract.js…','La primera vez puede tardar ~30 s');
+
+  const useCNN=!!S.tmModel;
+  setP(0,useCNN?'Iniciando CNN…':'Cargando Tesseract.js…',
+    useCNN?'Modelo '+S.tmModel.getTotalClasses()+' clases':'Primera vez ~30 s');
+
   try{
-    await loadTesseract();
-    setP(8,'Inicializando motor OCR…','');
-    // Always recreate worker to pick up new params
-    if(S.ocrWorker){try{await S.ocrWorker.terminate();}catch{}S.ocrWorker=null;}
-    S.ocrWorker=await Tesseract.createWorker('eng',1,{
-      logger:m=>{
-        if(m.status==='loading tesseract core')setP(5,'Cargando núcleo…','');
-        if(m.status==='loading language traineddata')setP(14,'Cargando modelo…','');
-        if(m.status==='recognizing text')setP(30+Math.round((m.progress||0)*52),'Reconociendo…',`${Math.round((m.progress||0)*100)}%`);
-      }
-    });
-    // PSM 11 = sparse text: best for grids where most cells are empty
-    // Strict whitelist: only chars that appear in the planilla
-    await S.ocrWorker.setParameters({
-      tessedit_char_whitelist:'DN1234T-',
-      tessedit_pageseg_mode:'11',   // sparse text — ideal for grids
-      preserve_interword_spaces:'1',
-    });
-    const worker=S.ocrWorker;
-
-    setP(20,'Recortando zona de datos…','');
+    // ── PASO 1: Cargar imagen y aplicar homografía ──
+    setP(5,'Cargando imagen…','');
     const full=await loadImgCanvas(S.capturedUrl);
-    const{x1,y1,x2,y2}=S.cropRect;
-    const cropX=Math.round(x1*full.width),cropY=Math.round(y1*full.height);
-    const cropW=Math.round((x2-x1)*full.width),cropH=Math.round((y2-y1)*full.height);
+    const polyPx=cropPolyToImagePixels(full);
+
     const rows=S.cfg.gridRows,cols=S.cfg.gridCols;
+    const CELL_OUT=useCNN?48:72; // CNN needs small, Tesseract benefits from bigger
+    const outW=cols*CELL_OUT,outH=rows*CELL_OUT;
 
-    // Scale up aggressively: target min 48px per cell height, min 3× scale
-    const naturalRowH=cropH/rows;
-    const scale=Math.max(3,Math.min(6,60/naturalRowH));
-    const outW=Math.round(cropW*scale),outH=Math.round(cropH*scale);
+    setP(12,'Aplicando transformación de perspectiva…','Homografía → imagen plana');
+    const warped=warpPerspective(full,polyPx,outW,outH);
+    setP(30,'Imagen plana lista','');
 
-    setP(24,'Escalando imagen ('+Math.round(scale)+'×)…','');
-    const cropped=document.createElement('canvas');cropped.width=outW;cropped.height=outH;
-    const cctx=cropped.getContext('2d');
-    cctx.fillStyle='#fff';cctx.fillRect(0,0,outW,outH);
-    cctx.imageSmoothingEnabled=true;cctx.imageSmoothingQuality='high';
-    cctx.drawImage(full,cropX,cropY,cropW,cropH,0,0,outW,outH);
+    // Show warped preview so user can verify alignment
+    renderWarpedPreview(warped,rows,cols);
 
-    // Preprocess: grayscale + binarize
-    const pp=preprocess(cropped);
+    // ── PASO 2: Preparar motor de reconocimiento ──
+    if(!useCNN){
+      setP(32,'Cargando Tesseract.js…','');
+      await loadTesseract();
+      if(S.ocrWorker){try{await S.ocrWorker.terminate();}catch{}S.ocrWorker=null;}
+      S.ocrWorker=await Tesseract.createWorker('eng',1,{logger:m=>{
+        if(m.status==='loading tesseract core')setP(34,'Cargando núcleo…','');
+      }});
+      const whitelist=buildWhitelist();
+      await S.ocrWorker.setParameters({
+        tessedit_char_whitelist:whitelist,
+        tessedit_pageseg_mode:'8',
+        classify_enable_learning:'0',
+        classify_enable_adaptive_matcher:'0',
+      });
+    }
 
-    setP(30,'Reconociendo texto (PSM 11 sparse)…','Buscando D, N1, T…');
-    const{data}=await worker.recognize(pp);
-
-    setP(88,'Mapeando a celdas…','');
+    // ── PASO 3: Extraer y clasificar cada celda ──
+    const total=rows*cols;
     const cells=[];
     for(let r=0;r<rows;r++)for(let c=0;c<cols;c++)
       cells.push({row:r,col:c,rawText:'',code:'',confidence:0,edited:false});
 
-    const imgW=pp.width,imgH=pp.height;
-    const cellW=imgW/cols,cellH=imgH/rows;
+    const cellCanvas=document.createElement('canvas');
+    const TRIM=Math.round(CELL_OUT*0.12); // 12% interior trim = eliminar líneas de tabla
+    const innerSz=CELL_OUT-TRIM*2;
+    cellCanvas.width=innerSz;cellCanvas.height=innerSz;
+    const cctx=cellCanvas.getContext('2d');
 
-    // Accept all words with confidence >= 10 (we rely on strict whitelist to filter noise)
-    (data.words||[]).forEach(w=>{
-      const text=normCode(w.text);if(!text||w.confidence<10)return;
-      const xc=(w.bbox.x0+w.bbox.x1)/2,yc=(w.bbox.y0+w.bbox.y1)/2;
-      const col=Math.min(cols-1,Math.max(0,Math.floor(xc/cellW)));
-      const row=Math.min(rows-1,Math.max(0,Math.floor(yc/cellH)));
-      const idx=row*cols+col;
-      if(w.confidence>(cells[idx].confidence||0)){
-        cells[idx].rawText=w.text.trim();cells[idx].code=text;cells[idx].confidence=Math.round(w.confidence);
-      }
-    });
+    setP(35,useCNN?'Clasificando celdas con CNN…':'Reconociendo celdas con OCR…',`${total} celdas`);
 
-    const rec=cells.filter(c=>c.code).length;
+    for(let r=0;r<rows;r++){
+      for(let c=0;c<cols;c++){
+        const idx=r*cols+c;
+        if(idx%cols===0){
+          const pct=35+Math.round((idx/total)*58);
+          setP(pct,`Fila ${r+1}/${rows}…`,`${cells.filter(x=>x.code).length} reconocidos`);
+        }
 
-    // If <30% recognized, try row-by-row pass as fallback (PSM 7 per row)
-    if(rec<rows*cols*0.3){
-      setP(88,'Pasada por filas (fallback)…',`Solo ${rec} reconocidos, probando fila a fila`);
-      await worker.setParameters({tessedit_char_whitelist:'DN1234T-',tessedit_pageseg_mode:'7',preserve_interword_spaces:'1'});
-      for(let r=0;r<rows;r++){
-        setP(88+Math.round((r/rows)*9),`Fila ${r+1}/${rows}…`,'');
-        const rowCanvas=document.createElement('canvas');
-        rowCanvas.width=outW;rowCanvas.height=Math.round(cellH);
-        const rctx=rowCanvas.getContext('2d');
-        rctx.fillStyle='#fff';rctx.fillRect(0,0,rowCanvas.width,rowCanvas.height);
-        rctx.drawImage(pp,0,Math.round(r*cellH),outW,Math.round(cellH),0,0,outW,Math.round(cellH));
-        const{data:rd}=await worker.recognize(rowCanvas);
-        (rd.words||[]).forEach(w=>{
-          const text=normCode(w.text);if(!text||w.confidence<10)return;
-          const xc=(w.bbox.x0+w.bbox.x1)/2;
-          const col=Math.min(cols-1,Math.max(0,Math.floor(xc/cellW)));
-          const idx=r*cols+col;
-          if(w.confidence>(cells[idx].confidence||0)){
-            cells[idx].rawText=w.text.trim();cells[idx].code=text;cells[idx].confidence=Math.round(w.confidence);
+        // Extract cell from warped canvas (with interior trim)
+        cctx.clearRect(0,0,innerSz,innerSz);
+        cctx.fillStyle='#fff';cctx.fillRect(0,0,innerSz,innerSz);
+        cctx.drawImage(warped,
+          c*CELL_OUT+TRIM, r*CELL_OUT+TRIM, innerSz, innerSz,
+          0, 0, innerSz, innerSz);
+
+        if(useCNN){
+          // CNN path: only assign shift if confidence ≥ 55%
+          // Below that threshold the model is uncertain → treat as empty
+          const res=await classifyCell(cellCanvas);
+          if(res&&res.code&&res.confidence>=55){
+            cells[idx].rawText=res.code;
+            cells[idx].code=res.code;
+            cells[idx].confidence=res.confidence;
           }
-        });
+        }else{
+          // Tesseract fallback — apply binarize first
+          toGray(cellCanvas);
+          adaptiveBinarizeRow(cellCanvas);
+          const{data}=await S.ocrWorker.recognize(cellCanvas);
+          const best=(data.words||[]).reduce((a,w)=>w.confidence>a.confidence?w:a,{confidence:-1,text:''});
+          const code=normCode(best.text);
+          if(code&&best.confidence>15){
+            cells[idx].rawText=best.text.trim();
+            cells[idx].code=code;
+            cells[idx].confidence=Math.round(best.confidence);
+          }
+        }
       }
     }
 
-    setP(98,'Guardando…','');
-    const isAnnual=S.cfg.planillaType==='annual';
-    S.planilla={id:'p-'+Date.now(),capturedAt:new Date().toISOString(),year:S.cfg.year,month:isAnnual?null:S.cfg.month,planillaType:S.cfg.planillaType,rows,cols,cells};
+    // ── PASO 4: Guardar ──
+    setP(96,'Guardando…','');
+    S.planilla={
+      id:'p-'+Date.now(),capturedAt:new Date().toISOString(),
+      year:S.cfg.year,month:null,planillaType:'annual',rows,cols,cells,
+    };
     savePlanilla();
-    const recFinal=cells.filter(c=>c.code).length;
-    setP(100,'¡Completado!',`${recFinal} celdas reconocidas de ${rows*cols}`);
+
+    const rec=cells.filter(c=>c.code).length;
+    setP(100,'¡Completado!',`${rec}/${total} reconocidos (${useCNN?'CNN':'OCR'})`);
+
     document.getElementById('btn-go-review').style.display='';
     document.getElementById('btn-retry').style.display='';
     document.getElementById('btn-clear').style.display='';
-    refreshHome();snack(`✓ ${recFinal} celdas reconocidas`,'ok');
+    // Show export-cells button if no CNN model yet (for training)
+    if(!useCNN){
+      const b=document.getElementById('btn-export-cells');if(b)b.style.display='';
+    }
+    refreshHome();
+    snack(`✓ ${rec} turnos · ${useCNN?'CNN':'OCR'} · revisa la cuadrícula`,'ok');
+
   }catch(e){
-    setP(0,'Error en OCR',e.message);snack('Error: '+e.message,'err');
+    console.error('OCR/CNN error',e);
+    setP(0,'Error',e.message||String(e));
+    snack('Error: '+(e.message||String(e)),'err');
     document.getElementById('btn-process').style.display='';
     document.getElementById('btn-retry').style.display='';
     document.getElementById('crop-instr').style.display='flex';
     initCropOverlay();
   }finally{S.processing=false;}
+}
+
+/** Show the warped (perspective-corrected) image with grid overlay so user can verify */
+function renderWarpedPreview(warpedCanvas,rows,cols){
+  try{
+    let dbg=document.getElementById('ocr-debug-canvas');
+    if(!dbg){
+      dbg=document.createElement('canvas');
+      dbg.id='ocr-debug-canvas';
+      dbg.style.cssText='width:100%;border-radius:10px;margin-top:10px;border:1.5px solid var(--brd);max-height:220px;object-fit:contain';
+      document.getElementById('scan-wrap').after(dbg);
+    }
+    const W=Math.min(620,warpedCanvas.width);
+    const H=Math.round(W*(warpedCanvas.height/warpedCanvas.width));
+    dbg.width=W;dbg.height=H;
+    const ctx=dbg.getContext('2d');
+    ctx.drawImage(warpedCanvas,0,0,W,H);
+
+    // Draw grid
+    const cw=W/cols,ch=H/rows;
+    ctx.strokeStyle='rgba(167,139,202,0.55)';ctx.lineWidth=1;
+    for(let r=0;r<=rows;r++){ctx.beginPath();ctx.moveTo(0,r*ch);ctx.lineTo(W,r*ch);ctx.stroke();}
+    for(let c=0;c<=cols;c++){ctx.beginPath();ctx.moveTo(c*cw,0);ctx.lineTo(c*cw,H);ctx.stroke();}
+
+    ctx.font='bold 10px sans-serif';ctx.fillStyle='rgba(0,0,0,0.6)';ctx.textAlign='left';
+    ctx.fillText(`Homografía aplicada · ${cols}×${rows}`,6,13);
+  }catch(e){console.warn('Warp preview error',e);}
 }
 
 /* ══ REVIEW ══ */
@@ -1628,69 +2333,40 @@ async function syncFromCalendar(){
 
 /* ══ FULLCALENDAR ══ */
 function initCalendar(){
-  document.getElementById('cal-auth-alert').style.display=isAuthed()?'none':'';
-  if(!S.fc){
-    S.fc=new FullCalendar.Calendar(document.getElementById('cal-wrap'),{
+  if(!S.fcal){
+    S.fcal=new FullCalendar.Calendar(document.getElementById('cal-wrap'),{
       locale:'es',
       initialView:'dayGridMonth',
       headerToolbar:{left:'prev',center:'title',right:'next'},
       height:'auto',
       fixedWeekCount:false,
-      initialDate:`${S.cfg.year}-${String(S.cfg.month).padStart(2,'0')}-01`,
+      initialDate:`${S.cfg.year}-01-01`,
       eventClick:info=>showDayDetail(info.event),
-      datesSet:info=>{
-        S.calCurrentStart=info.startStr;S.calCurrentEnd=info.endStr;
-        if(isAuthed())loadCalendarEventsRange(info.startStr,info.endStr);
-      },
-      eventDidMount:info=>{
-        const priv=info.event.extendedProperties?.private;
-        if(priv?.shiftColor)info.el.style.backgroundColor=priv.shiftColor;
-      },
+      datesSet:()=>updateCalStats(),
     });
-    S.fc.render();
+    S.fcal.render();
   }
-  if(isAuthed()&&S.calCurrentStart)loadCalendarEventsRange(S.calCurrentStart,S.calCurrentEnd);
-  else if(isAuthed())loadCalendarEvents();
+  loadLocalCalendar();
 }
 function setCalView(v){
-  if(!S.fc)return;
-  S.fc.changeView(v);
+  if(!S.fcal)return;
+  S.fcal.changeView(v);
   ['dayGridMonth','timeGridWeek','listMonth'].forEach(vv=>{
     const id={dayGridMonth:'cvb-month',timeGridWeek:'cvb-week',listMonth:'cvb-list'}[vv];
     document.getElementById(id)?.classList.toggle('active',vv===v);
   });
 }
-async function loadCalendarEvents(){
-  const year=S.cfg.year,month=S.cfg.month;
-  const start=new Date(year,month-1,1).toISOString();
-  const end=new Date(year,month,0,23,59,59).toISOString();
-  loadCalendarEventsRange(start,end);
-}
-async function loadCalendarEventsRange(startStr,endStr){
-  if(!isAuthed())return;
-  try{
-    const calId=await getOrCreateCal();
-    const data=await gcal(`/calendars/${encodeURIComponent(calId)}/events?timeMin=${encodeURIComponent(new Date(startStr).toISOString())}&timeMax=${encodeURIComponent(new Date(endStr).toISOString())}&singleEvents=true&maxResults=500`);
-    const events=(data.items||[]).filter(e=>e.description?.includes(APP_TAG));
-    if(!S.fc)return;
-    S.fc.removeAllEvents();
-    const statMap={};
-    events.forEach(ev=>{
-      const priv=ev.extendedProperties?.private||{};
-      const code=priv.shiftCode||'?';
-      const color=priv.shiftColor||shiftColor(code)||'#A78BCA';
-      const hours=parseFloat(priv.shiftHours||shiftHours(code)||0);
-      statMap[code]=(statMap[code]||{count:0,hours:0,color,label:priv.shiftLabel||code});
-      statMap[code].count++;statMap[code].hours+=hours;
-      S.fc.addEvent({
-        id:ev.id,title:code,start:ev.start?.date||ev.start?.dateTime,end:ev.end?.date||ev.end?.dateTime,
-        backgroundColor:color,borderColor:color,textColor:'#fff',
-        extendedProps:{priv,ev},
-      });
-    });
-    // Stats strip
-    renderCalStats(statMap);
-  }catch(e){console.warn('Calendar load error:',e);}
+function updateCalStats(){
+  if(!S.fcal)return;
+  const statMap={};
+  (S.localEvents||[]).forEach(ev=>{
+    const code=ev.code||'?';
+    const color=ev.color||shiftColor(code)||'#A78BCA';
+    const hours=parseFloat(ev.hours)||0;
+    if(!statMap[code])statMap[code]={count:0,hours:0,color,label:S.cfg.shifts[code]?.label||code};
+    statMap[code].count++;statMap[code].hours+=hours;
+  });
+  renderCalStats(statMap);
 }
 function renderCalStats(statMap){
   const wrap=document.getElementById('cal-stats-wrap');
@@ -1763,26 +2439,25 @@ function delVac(id){S.vacs=S.vacs.filter(v=>v.id!==id);saveVacs();renderVacs();s
 function renderSettings(){
   const ny=new Date().getFullYear();
   document.getElementById('cfg-year').innerHTML=[ny-1,ny,ny+1,ny+2].map(y=>`<option value="${y}" ${y===S.cfg.year?'selected':''}>${y}</option>`).join('');
-  document.getElementById('cfg-month').innerHTML=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'].map((m,i)=>`<option value="${i+1}" ${i+1===S.cfg.month?'selected':''}>${m}</option>`).join('');
-  const tzs=['Europe/Madrid','Europe/London','Europe/Paris','Europe/Berlin','Europe/Lisbon','Europe/Rome','America/New_York','America/Chicago','America/Los_Angeles','America/Sao_Paulo','Asia/Tokyo'];
+  const tzs=['Europe/Madrid','Europe/London','Europe/Paris','Europe/Berlin','Europe/Lisbon','America/New_York','America/Chicago','America/Los_Angeles','America/Sao_Paulo'];
   document.getElementById('cfg-tz').innerHTML=tzs.map(t=>`<option value="${t}" ${t===S.cfg.timezone?'selected':''}>${t}</option>`).join('');
   document.getElementById('cfg-row').value=S.cfg.targetRow+1;
   document.getElementById('cfg-dup').value=S.cfg.duplicatePolicy;
-  document.getElementById('cfg-grid-rows').value=S.cfg.gridRows;
-  document.getElementById('cfg-grid-cols').value=S.cfg.gridCols;
-  document.getElementById('cfg-ptype').value=S.cfg.planillaType||'annual';
   document.getElementById('cfg-theme-sel').value=S.theme;
   const cid=localStorage.getItem('th_cid')||'';
   document.getElementById('cfg-cid').placeholder=cid?'••••••••••••••••':'xxxxx.apps.googleusercontent.com';
   document.getElementById('cfg-cid').value='';
-  renderPtypeHint();renderShifts();refreshTopbar();
-}
-function renderPtypeHint(){
-  const t=document.getElementById('cfg-ptype')?.value||'annual';
-  const hints={monthly:'Varias personas por fila. Elige tu fila con el selector.',annual:'Planilla personal anual. 12 meses × 31 días. Configura 24 filas si hay 2 filas por mes.'};
-  const el=document.getElementById('ptype-hint');if(el)el.textContent=hints[t]||'';
-  const rf=document.getElementById('cfg-row-field');const mw=document.getElementById('cfg-month-wrap');
-  if(rf)rf.style.display=t==='annual'?'none':'';if(mw)mw.style.opacity=t==='annual'?'0.4':'1';
+  // CNN model
+  const tmUrl=S.cfg.tmModelUrl||'';
+  const tmEl=document.getElementById('cfg-tm-url');
+  if(tmEl)tmEl.value=tmUrl;
+  updateCNNBadge(!!S.tmModel);
+  if(S.tmModel)renderCNNMap();
+  else{const s=document.getElementById('cnn-map-section');if(s)s.style.display='none';}
+  // Show export cells button if there's a captured image
+  const exportBtn=document.getElementById('btn-export-cells');
+  if(exportBtn)exportBtn.style.display=S.capturedUrl?'':'none';
+  renderShifts();refreshTopbar();
 }
 function renderShifts(){
   document.getElementById('shifts-tbody').innerHTML=Object.entries(S.cfg.shifts).map(([key,sh])=>`
@@ -1828,7 +2503,21 @@ function snack(msg,type='info'){
   applyTheme(S.theme);
   updateGridCfgUI();
   refreshHome();
-  trySilentAuth(); // Try to restore session from localStorage
+  trySilentAuth();
+  // Restore saved cropPoly
+  try{const s=localStorage.getItem('th_cropPoly');if(s)S.cropPoly=JSON.parse(s);}catch{}
+  // Auto-load CNN model if URL was saved
+  if(S.cfg.tmModelUrl){
+    setTimeout(async()=>{
+      try{
+        await loadTMLibs();
+        const url=S.cfg.tmModelUrl.endsWith('/')?S.cfg.tmModelUrl:S.cfg.tmModelUrl+'/';
+        S.tmModel=await window.tmImage.load(url+'model.json',url+'metadata.json');
+        updateCNNBadge(true);
+        console.log('CNN model loaded silently:',S.tmModel.getTotalClasses(),'classes');
+      }catch(e){console.warn('CNN auto-load failed:',e.message);}
+    },2000);
+  }
   setTimeout(()=>{const sp=document.getElementById('splash');if(sp){sp.classList.add('hide');setTimeout(()=>sp.remove(),520);}},1600);
 })();
 </script>
